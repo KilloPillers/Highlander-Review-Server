@@ -45,10 +45,10 @@ app.get("/oauth2callback", async(req, res) => {
   const googleUser = await getGoogleUser(id_token, access_token);
   //jwt.decode(id_token);
   console.log("google user: ", googleUser, "logged in");
+  const expirationDate = new Date();
+  expirationDate.setDate(expirationDate.getDate() + 7);
   res.cookie("googleUser", googleUser, { 
-    maxAge: 30 * 60 * 1000, 
-    secure: true,
-    sameSite: "none",
+    expires: expirationDate,
   });
   res.redirect(redirect);
 });
