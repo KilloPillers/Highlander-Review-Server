@@ -41,6 +41,7 @@ app.get("/oauth2callback", async(req, res) => {
   const {id_token, access_token} = await getGoogleOAuthTokens(code);
   const googleUser = await getGoogleUser(id_token, access_token);
   //jwt.decode(id_token);
+  console.log("google user: ", googleUser, "logged in");
   res.cookie("googleUser", googleUser, { maxAge: 30 * 60 * 1000 })
   res.redirect(redirect);
 });
