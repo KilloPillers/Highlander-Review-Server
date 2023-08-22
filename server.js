@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser')
 const mongoose = require('mongoose');
 const { getGoogleOAuthTokens, getGoogleUser } = require('./services/googleservices.js');
 require('dotenv').config();
@@ -28,6 +29,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(cookieParser());
 mongoose.connect(process.env.ATLAS_URI).catch((err)=>{
   console.error(err)
 });
@@ -45,7 +47,6 @@ app.get("/oauth2callback", async(req, res) => {
   console.log("google user: ", googleUser, "logged in");
   res.cookie("googleUser", googleUser, { 
     maxAge: 30 * 60 * 1000, 
-    httpOnly: true,
     secure: true,
     sameSite: "none",
   });
