@@ -55,7 +55,9 @@ app.get("/oauth2callback", async(req, res) => {
     sameSite: 'none',
     secure: true
   });
-  res.redirect(redirect);
+  setTimeout(() => {
+    res.redirect(redirect);
+  }, 1000);
 });
 
 // start the Express server
