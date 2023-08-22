@@ -24,7 +24,7 @@ const corsOptions = {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true,
+  credentials: 'include' // <-- REQUIRED backend setting
 };
 
 app.use(cors(corsOptions));
