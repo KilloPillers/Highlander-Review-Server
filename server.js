@@ -23,6 +23,7 @@ const corsOptions = {
       callback(new Error('Not allowed by CORS'));
     }
   },
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
@@ -42,7 +43,12 @@ app.get("/oauth2callback", async(req, res) => {
   const googleUser = await getGoogleUser(id_token, access_token);
   //jwt.decode(id_token);
   console.log("google user: ", googleUser, "logged in");
-  res.cookie("googleUser", googleUser, { maxAge: 30 * 60 * 1000 })
+  res.cookie("googleUser", googleUser, { 
+    maxAge: 30 * 60 * 1000, 
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+  });
   res.redirect(redirect);
 });
 
