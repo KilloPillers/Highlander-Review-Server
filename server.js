@@ -50,6 +50,8 @@ app.get("/oauth2callback", async(req, res) => {
   expirationDate.setDate(expirationDate.getDate() + 7);
   res.cookie("googleUser", googleUser, { 
     expires: expirationDate,
+    domain: 'highlander.reviews',
+    path: '/',
     sameSite: 'none',
     secure: true
   });
