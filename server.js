@@ -30,6 +30,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
+app.set('trust proxy', 1) // trust first proxy
 mongoose.connect(process.env.ATLAS_URI).catch((err)=>{
   console.error(err)
 });
@@ -49,6 +50,8 @@ app.get("/oauth2callback", async(req, res) => {
   expirationDate.setDate(expirationDate.getDate() + 7);
   res.cookie("googleUser", googleUser, { 
     expires: expirationDate,
+    sameSite: 'none',
+    secure: true
   });
   res.redirect(redirect);
 });
