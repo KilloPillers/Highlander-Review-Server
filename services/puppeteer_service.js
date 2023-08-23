@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer')
 async function fill_form(review) {
   try{
     console.log("filling google form")
-    const browser = await puppeteer.launch({headless: 'new'})
+    const browser = await puppeteer.launch({headless: 'new', args: ['--no-sandbox']})
     console.log("browser launched")
     const page = await browser.newPage()
     console.log("new page created")
