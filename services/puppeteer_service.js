@@ -28,8 +28,9 @@ async function fill_form(review) {
     await browser.close()
     console.log("browser closed")
   }
-  catch {
+  catch (err) {
     console.log("COULD NOT FILL GOOGLE FORM")
+    console.log(err)
     return
   } 
   
