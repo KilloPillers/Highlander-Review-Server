@@ -7,6 +7,7 @@ const reviewSchema = {
   additional_comments: String,
   difficulty: Number,
   date: String,
+  submitted: Boolean,
   like: Number,
   dislike: Number,
 }

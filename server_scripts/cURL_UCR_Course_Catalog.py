@@ -20,7 +20,9 @@ def fixCourseTitle(courseTitle):
 
 
 pageMaxSize = 500
-JSESSIONID="5BE2A6BE006821F6FB9092ADC67E1E43"
+JSESSIONID="CCB27D5666CF757651B7360C9DC20A42"
+BIGipServerp_registrationssb_ucr_edu_8443="2677280940.64288.0000"
+uniqueSessionId="zu5h61692772421598"
 
 url = 'https://registrationssb.ucr.edu/StudentRegistrationSsb/ssb/courseSearchResults/'
 course_search_results_header = {
@@ -33,7 +35,7 @@ course_search_results_header = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
     'Referer': 'https://registrationssb.ucr.edu/StudentRegistrationSsb/ssb/courseSearch/courseSearch',
     'Connection': 'keep-alive',
-    'Cookie': f'JSESSIONID={JSESSIONID}; BIGipServerp_registrationssb.ucr.edu_8443=2811498668.64288.0000',
+    'Cookie': f'JSESSIONID={JSESSIONID}; BIGipServerp_registrationssb.ucr.edu_8443={BIGipServerp_registrationssb_ucr_edu_8443}',
     'Sec-Fetch-Dest': 'empty',
     'X-Requested-With': 'XMLHttpRequest',
     'X-Synchronizer-Token': '10e3d3f3-2370-4899-aa44-2802a8f28cbb'
@@ -43,7 +45,7 @@ params = {
     'txt_term': '202410',
     'startDatepicker': '',
     'endDatepicker': '',
-    'uniqueSessionId': 'xbtch1691017523147',
+    'uniqueSessionId': uniqueSessionId,
     'pageOffset': '0',
     'pageMaxSize': pageMaxSize,
     'sortColumn': 'subjectDescription',
@@ -107,7 +109,9 @@ with tqdm(total=len(course_data_list), desc="Requesting Descriptions", unit="req
             "subject_code": course["subjectCode"], 
             "course_number": course["courseNumber"].strip('.'),
             "course_title": fixCourseTitle(course["courseTitle"]),
-            "course_description": course["courseDescription"].strip('\n')
+            "course_description": course["courseDescription"].strip('\n'),
+            "subject_description": course["subjectDescription"],
+            "college": course["college"],
         }}
         collection.update_one(query, update_operation, upsert=True)
         pbar.update()

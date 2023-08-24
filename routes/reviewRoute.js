@@ -57,13 +57,6 @@ router.route("/submit-review").post(async(req, res) => {
   new_avg = parseFloat(new_avg.toFixed(2));
 
   try {
-    await ps.fill_form(req.body)
-  }
-  catch (err){
-    return res.json("Something went wrong")
-  }
-
-  try {
     const foundReviews = await Review.find({ user_email: req.body["user_email"], class_name: req.body["class_name"] });
     if (foundReviews.length !== 0) {
       console.log(`user ${req.body["user_email"]} already reviewed ${req.body["class_name"]}`)
@@ -92,6 +85,7 @@ router.route("/submit-review").post(async(req, res) => {
 
   delete req.body["current_review_count"];
   delete req.body["current_review_avg"];
+  req.body.submitted = false;
   await Review.create(req.body)
     .then((createdReview) => {
     })

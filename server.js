@@ -3,6 +3,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser')
 const mongoose = require('mongoose');
 const { getGoogleOAuthTokens, getGoogleUser } = require('./services/googleservices.js');
+const scheduled_tasks = require('./services/scheduled_tasks.js');
 require('dotenv').config();
 
 const PORT = process.env.PORT || 5050;
@@ -38,7 +39,6 @@ mongoose.connect(process.env.ATLAS_URI).catch((err)=>{
 app.use("/", require("./routes/reviewRoute.js"));
 app.use("/", require("./routes/courseRoute.js"))
 
-
 app.get("/oauth2callback", async(req, res) => {
   const redirect = req.query.state;
   const code = req.query.code;
@@ -50,10 +50,8 @@ app.get("/oauth2callback", async(req, res) => {
   expirationDate.setDate(expirationDate.getDate() + 7);
   res.cookie("googleUser", googleUser, { 
     expires: expirationDate,
-    domain: 'highlander.reviews',
+    domain: process.env.DOMAIN,
     path: '/',
-    sameSite: 'none',
-    secure: true
   });
   setTimeout(() => {
     res.redirect(redirect);
