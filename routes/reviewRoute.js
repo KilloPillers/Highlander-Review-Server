@@ -50,12 +50,6 @@ router.route("/liked").post((req, res) => {
 });
 
 router.route("/submit-review").post(async(req, res) => {
-  var new_avg =
-    (req.body["current_review_avg"] * req.body["current_review_count"] +
-      req.body["difficulty"]) /
-    (req.body["current_review_count"] + 1);
-  new_avg = parseFloat(new_avg.toFixed(2));
-
   try {
     const foundReviews = await Review.find({ user_email: req.body["user_email"], class_name: req.body["class_name"] });
     if (foundReviews.length !== 0) {
@@ -67,24 +61,23 @@ router.route("/submit-review").post(async(req, res) => {
     return res.json("Something went wrong");
   }
 
-  await Course.findOneAndUpdate(
-    { class_name: req.body["class_name"] },
-    { 
-      $set: {average_diff: new_avg},
-      $inc: {number_of_reviews: 1}
-    },
-    { new: true }
-    )
-    .then((foundCourses) => {
-      console.log(`course ${req.body["class_name"]} updated`);
+  await Course.findOne(
+    { class_name: req.body["class_name"] })
+    .then((course) => {
+      console.log("number of reviws", course.number_of_reviews)
+      var new_avg = (course.average_diff * course.number_of_reviews +
+        req.body["difficulty"]) /
+      (course.number_of_reviews + 1);
+      new_avg = parseFloat(new_avg.toFixed(2));
+      course.number_of_reviews += 1;
+      course.average_diff = new_avg;
+      course.save();
     })
     .catch((err) => {
       console.log(err);
       return res.json("Something went wrong");
     });
 
-  delete req.body["current_review_count"];
-  delete req.body["current_review_avg"];
   req.body.submitted = false;
   await Review.create(req.body)
     .then((createdReview) => {
