@@ -2,17 +2,28 @@ const express = require("express");
 const router = express.Router();
 const Review = require("../models/reviewModel");
 const Course = require("../models/courseModel");
-const ps = require("../services/puppeteer_service.js");
-
 
 router.route("/course-reviews/:name").get((req, res) => {
   try {
     Review.find({ class_name: req.params.name })
+      .sort(req.query.sort)
       .skip(req.query.skip).limit(req.query.limit)
       .select('-user_email')
       .then((foundReviews) => {
       res.json(foundReviews);
     });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.route("/course-reviews-graph-data/:name").get((req, res) => {
+  try {
+    Review.find({ class_name: req.params.name })
+      .select('-user_email -additional_comments -submitted -like -dislike -_id -__v')
+      .then((foundReviews) => {
+        res.json(foundReviews);
+      });
   } catch (err) {
     console.log(err);
   }
