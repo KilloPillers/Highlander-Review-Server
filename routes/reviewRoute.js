@@ -3,6 +3,7 @@ const router = express.Router();
 const Review = require("../models/reviewModel");
 const Course = require("../models/courseModel");
 
+//Returns all reviews for a course
 router.route("/course-reviews/:name").get((req, res) => {
   try {
     Review.find({ class_name: req.params.name })
@@ -17,6 +18,7 @@ router.route("/course-reviews/:name").get((req, res) => {
   }
 });
 
+//Returns data for graph for a course
 router.route("/course-reviews-graph-data/:name").get((req, res) => {
   try {
     Review.find({ class_name: req.params.name })
@@ -29,6 +31,7 @@ router.route("/course-reviews-graph-data/:name").get((req, res) => {
   }
 });
 
+//Handles like/dislike
 router.route("/liked").post((req, res) => {
   if (req.body.type === "liked")
     Review.findOneAndUpdate(
@@ -60,6 +63,7 @@ router.route("/liked").post((req, res) => {
     });
 });
 
+//Submits a review
 router.route("/submit-review").post(async(req, res) => {
   try {
     const foundReviews = await Review.find({ user_email: req.body["user_email"], class_name: req.body["class_name"] });
@@ -100,6 +104,7 @@ router.route("/submit-review").post(async(req, res) => {
   res.json(`new review created`);
 });
 
+//Query for courses
 router.route("/query-course/:course").get(async (req, res) => {
   const class_name_regex = new RegExp("^"+req.params.course, "i");
   const course_title_regex = new RegExp(req.params.course, "i");
@@ -138,6 +143,7 @@ router.route("/query-course/:course").get(async (req, res) => {
     }
 });
 
+//Query for courses
 router.route("/get-course/:course").get((req, res) => {
   Course.find({ class_name: req.params.course }).then((foundCourses) => {
     res.json(foundCourses);
