@@ -14,6 +14,7 @@ import json
 from typing import TypedDict
 from datetime import datetime
 from tqdm import tqdm
+import subprocess
 
 class ReviewModel(TypedDict):
     class_name: str
@@ -56,6 +57,13 @@ current_course = data[2][0]
 current_course_review_count = 1
 current_course_average_diff = float(data[2][1])
 
+print("Resetting Review Count and Average Difficulty for all courses in MongoDB")
+courses_collection.update_many({}, {"$set": {"average_diff": 0, "number_of_reviews": 0}})
+
+print("Deleting all reviews from MongoDB")
+reviews_collection.delete_many({})
+
+print("Uploading Reviews to MongoDB")
 with tqdm(total=len(data[2:]), desc="Uploading Reviews to MongoDB", unit="Reviews") as pbar:
     for row in data[2:]:
         if row[3] == "" or row[4] == "":
@@ -81,3 +89,16 @@ with tqdm(total=len(data[2:]), desc="Uploading Reviews to MongoDB", unit="Review
         reviews_collection.insert_one(review)
         pbar.update()
 print("Done uploading reviews to MongoDB")
+
+command = "chafa -w 9 -c 2 --center true --symbols block banner_small_light.svg"
+
+completed_process = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+print(completed_process.stdout)
+
+# Print the command's standard error
+print("Standard Error:")
+print(completed_process.stderr)
+
+# Print the command's return code
+print("Return Code:", completed_process.returncode)
