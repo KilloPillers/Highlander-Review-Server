@@ -86,18 +86,17 @@ with tqdm(total=len(data[2:]), desc="Uploading Reviews to MongoDB", unit="Review
                                  like=0,
                                  dislike=0)
             reviews_collection.insert_one(review)
+        if "See" in row[1]:
+            courses_collection.update_one(
+                {"class_name": row[0].strip()},
+                {"$set": {"is_redirect": True}})
+
         pbar.update()
 print("Done uploading reviews to MongoDB")
 
-command = "chafa -w 9 -c 2 --center true --symbols block banner_small_light.svg"
+command = "cat ./logo.txt"
 
 completed_process = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 print(completed_process.stdout)
 
-# Print the command's standard error
-print("Standard Error:")
-print(completed_process.stderr)
-
-# Print the command's return code
-print("Return Code:", completed_process.returncode)
