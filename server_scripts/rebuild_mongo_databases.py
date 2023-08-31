@@ -63,30 +63,29 @@ courses_collection.update_many({}, {"$set": {"average_diff": 0, "number_of_revie
 print("Deleting all reviews from MongoDB")
 reviews_collection.delete_many({})
 
-print("Uploading Reviews to MongoDB")
+current_course = data[2][0]
+current_course_review_count = 1
+current_course_average_diff = float(data[2][1])
 with tqdm(total=len(data[2:]), desc="Uploading Reviews to MongoDB", unit="Reviews") as pbar:
     for row in data[2:]:
-        if row[3] == "" or row[4] == "":
-            pbar.update()# if review doesn't have a difficulty rating or date, skip it
-            continue
-        elif row[0] != "":  # if new course
+        if row[0].strip() != "" and "See" not in row[1]:  # if new course
             # insert current_course (now previous course) into database
             courses_collection.update_one(
-                    {"course": current_course},
+                    {"class_name": current_course},
                     {"$set": {"average_diff": current_course_average_diff, "number_of_reviews": current_course_review_count}})
             # reset current courses variables
             current_course = row[0]
-            current_course_review_count = 1
+            current_course_review_count = 0
             current_course_average_diff = float(row[1])
-        else:  # if same course
+        if row[3].strip() != "":  # if new review
             current_course_review_count += 1
-        review = ReviewModel(class_name=current_course,
-                             additional_comments=row[2],
-                             difficulty=int(row[3]),
-                             date=(lambda date_str: datetime.strptime(date_str, '%m/%d/%Y').strftime('%Y/%m/%d'))(row[4].replace('l', '/').replace('-', '/')),
-                             like=0,
-                             dislike=0)
-        reviews_collection.insert_one(review)
+            review = ReviewModel(class_name=current_course,
+                                 additional_comments=row[2],
+                                 difficulty=int(row[3]),
+                                 date=(lambda date_str: datetime.strptime(date_str, '%m/%d/%Y').strftime('%Y/%m/%d'))(row[4].replace('l', '/').replace('-', '/')),
+                                 like=0,
+                                 dislike=0)
+            reviews_collection.insert_one(review)
         pbar.update()
 print("Done uploading reviews to MongoDB")
 
