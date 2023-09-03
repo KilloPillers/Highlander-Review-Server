@@ -152,7 +152,6 @@ router.route("/submit-review").post(async(req, res) => {
 router.route("/query-course/:course").get(async (req, res) => {
   const class_name_regex = new RegExp("^"+req.params.course, "i");
   const course_title_regex = new RegExp(req.params.course, "i");
-  console.log(req.session)
   if (req.params.course.length <= 5) {
     try {
       const subject_code_results = await Course.find({"class_name": {$regex: class_name_regex}}).select("-_id -__v").limit(10).then((foundCourses) => {

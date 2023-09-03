@@ -64,7 +64,6 @@ app.get("/oauth2callback", async(req, res) => {
   //}
   console.log("google user: ", googleUser.email, "logged in");
   req.session.userID = googleUser.email;
-  console.log(req.session)
   const expirationDate = new Date();
   expirationDate.setDate(expirationDate.getDate() + 1); // 1 day
   res.cookie("googleUser", googleUser, { 
@@ -78,14 +77,12 @@ app.get("/oauth2callback", async(req, res) => {
 });
 
 app.get("/logout", (req, res) => {
-  console.log(req.session);
   req.session.destroy();
   res.clearCookie("googleUser", { 
     domain: process.env.DOMAIN, 
     path: '/' 
   });
   res.send("logged out");
-  console.log("logged out");
 });
 
 // start the Express server
