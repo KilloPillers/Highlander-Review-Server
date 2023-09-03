@@ -89,7 +89,7 @@ with tqdm(total=len(data[2:]), desc="Uploading Reviews to MongoDB", unit="Review
         if "See" in row[1]:
             courses_collection.update_one(
                 {"class_name": row[0].strip()},
-                {"$set": {"is_redirect": True}})
+                {"$set": {"is_redirect": row[1].split(" ")[1]}})
 
         pbar.update()
 print("Done uploading reviews to MongoDB")

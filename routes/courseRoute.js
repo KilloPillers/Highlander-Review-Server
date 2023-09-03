@@ -18,4 +18,20 @@ router
     }
   });
 
+router
+  .route("/get-review-count-from-course/:subjectCode/:courseNumber")
+  .get((req, res) => {
+    try {
+      Course.findOne({
+        subject_code: req.params.subjectCode,
+        course_number: req.params.courseNumber,
+      }).select("number_of_reviews")
+        .then((reviewCount) => {
+          res.json(reviewCount);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
 module.exports = router;
