@@ -40,7 +40,6 @@ const corsOptions = {
     }
   },
   credentials: true, // <-- REQUIRED backend setting
-  methods: '*',
 };
 
 app.use(cors(corsOptions));
