@@ -157,11 +157,11 @@ def compare_files():
 
 
 if __name__ == "__main__":
-    try:
+    if os.path.exists('./config.json'):
         with open("./config.json") as config_file:
             config = json.load(config_file)
             URI = config["URI"]
-    except FileNotFoundError:
+    else:
         URI = os.environ.get("URI")
     client = MongoClient(URI)
     db = client['UCR']
