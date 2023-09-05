@@ -12,12 +12,7 @@ import zlib
 import datetime
 
 def insert_review(review):
-    review["additional_comments"] = review["additional_comments"].strip('"')
-    review["difficulty"] = int(review["difficulty"])
-    review["like"] = 0
-    review["dislike"] = 0
     #convert date from MM/DD/YYYY to YYYY/MM/DD
-    review["date"] = datetime.datetime.strptime(review["date"], "%m/%d/%Y").strftime("%Y/%m/%d")
     query = {"class_name": review["class_name"],
              "difficulty": int(review["difficulty"]),
              "additional_comments": review["additional_comments"]}
@@ -92,9 +87,9 @@ def compare_files():
                     current_course = new_line_data[0]
                 if (old_lines[i] != new_lines[j]):
                     new_review = {"class_name": current_course,
-                                  "additional_comments": new_line_data[2],
-                                  "difficulty": new_line_data[3],
-                                  "date": new_line_data[4],
+                                  "additional_comments": new_line_data[2].strip('"'),
+                                  "difficulty": int(new_line_data[3]),
+                                  "date": datetime.datetime.strptime(new_line_data[4], "%m/%d/%Y").strftime("%Y/%m/%d"),
                                   "like": 0,
                                   "dislike": 0
                                   }
@@ -111,9 +106,9 @@ def compare_files():
                     current_course = new_line[0]
                 new_line_data = new_line.split('\t')
                 new_review = {"class_name": current_course,
-                              "additional_comments": new_line_data[2],
-                              "difficulty": new_line_data[3],
-                              "date": new_line_data[4],
+                              "additional_comments": new_line_data[2].strip('"'),
+                              "difficulty": int(new_line_data[3]),
+                              "date": datetime.datetime.strptime(new_line_data[4], "%m/%d/%Y").strftime("%Y/%m/%d"),
                               "like": 0,
                               "dislike": 0
                               }
