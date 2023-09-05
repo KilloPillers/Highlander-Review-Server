@@ -29,6 +29,7 @@ coursedata.txt
 coursedata1.json
 courses_data.json
 server_scripts/test.py
+server_scripts/*.tsv
 services/*.json
 server_scripts/test.py
 
