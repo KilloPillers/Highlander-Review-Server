@@ -179,7 +179,6 @@ router.route("/query-course/:course").get(async (req, res) => {
         .limit(10)
         .then((foundCourses) => {
           res.json(foundCourses);
-          res.json(req.session)
         });
       } catch (err) {
         console.log(err);
