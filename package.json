@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "heroku-postbuild": "mkdir ./.cache && mv /app/.cache/puppeteer ./.cache",
-    "build": "npm run build"
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
