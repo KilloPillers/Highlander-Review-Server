@@ -9,7 +9,6 @@
           "cmds": ["npm ci"]
         }
       }
-    },
-    "buildCommand": "npm run build"
+    }
   }
 }
